@@ -1,6 +1,6 @@
 # OenoEDA
 
-Exploratory data analysis project in R, using a dataset of 1599 red wines, each which is described by 12 physico-chemical attributes and one subjective quality score.
+Exploratory data analysis project in R, using a dataset of 1599 red wines, each which is described by 12 physico-chemical attributes and one subjective quality score. (look in RedWine_Dataset_Metadata.txt for more info about the dataset)
 
 I leveraged descriptive statistics and visualizations built with ggplot2 to gain intuition about the data set and uncover relationships between variables.
 
