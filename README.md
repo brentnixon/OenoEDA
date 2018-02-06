@@ -5,7 +5,7 @@ Exploratory data analysis project in R, using a dataset of 1599 red wines, each 
 I leveraged descriptive statistics and visualizations built with ggplot2 to gain intuition about the data set and uncover relationships between variables.
 
 #### For a closer look, go to: 
-##### * brentnixon.github.io/OenoEDA
+##### * https://brentnixon.github.io/OenoEDA/
 
 #### To mess with code, clone/download the repo and open the R Markdown file:
 ##### * BNixon_OenoEDA.Rmd
