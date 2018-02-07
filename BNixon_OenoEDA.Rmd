@@ -371,8 +371,11 @@ SO2 is mostly undetectable in wine, but at free SO2 concentrations over 50 ppm,
 SO2 becomes evident in the nose and taste of wine.
 
 ```{r echo=FALSE, Bivariate_alc_sugar}
-ggplot(aes(x = alcohol, y = residual.sugar), data = wn) + geom_point()
+ggplot(aes(x = alcohol, y = residual.sugar), data = wn) + geom_point(alpha =.1) 
+  + geom_smooth(method="lm", se=F, size=1)
+
 cor.test(wn$alcohol, wn$residual.sugar)
+?cor.test
 ```
 
 Plotting alcohol vs residual sugar shows that most wines have less than 1 g/L sugar,
@@ -384,21 +387,24 @@ As the correlation test shows, there is no real relationship between alcohol
 and residual sugar.
 
 ```{r echo=FALSE, Bivariate_alc_quality}
-ggplot(aes(x = alcohol, y = quality), data = wn) + geom_jitter(height = .4)
+ggplot(aes(x = alcohol, y = quality), data = wn) + 
+    geom_jitter(height = .4, alpha = .2) +
+    geom_smooth(method="lm", se=F, size=1)
 cor.test(wn$alcohol, wn$quality) 
 ```
 
 This plot suggests a moderate relationship between alcohol and quality. In the 
 highest and lowest ranges of quality, there is a weak (created by few data points)
-trend of higher alcohol associating with higher quality, and vice versa. A stronger 
-trend is that 'good' wines (with scores from 5-7) span a broad range of alcohol
-content, between 9 and 11%, as well as demonstrating a the same trend of higher 
-alcohol correlating with higher quality. The correlation test yields a 0.48 
-correlation between alcohol and quality. 
+trend of higher alcohol associating with higher quality, and vice versa.  The 
+blue line is a linear model fit to the data and demonstrates the positive trend.
+A stronger trend is that 'good' wines (with scores from 5-7) span a broad range
+of alcohol content, between 9 and 11%, as well as demonstrating a the same trend 
+of higher alcohol correlating with higher quality. The correlation test yields a 
+0.48 correlation between alcohol and quality. 
 
 ```{r echo=FALSE, Bivariate_sug_quality}
 ggplot(aes(x = residual.sugar, y = quality), data = wn) + 
-    geom_jitter(alpha = .3, height = .75)  
+    geom_jitter(alpha = .16, height = .75) 
 cor.test(wn$residual.sugar, wn$quality)
 ```
 
@@ -408,25 +414,33 @@ with sugar content out to 15 g/L, but they almost entirely cluster between 1 and
 g/L. As the correlation test shows, there is almost zero relationship between 
 residual sugar and quality. 
 
-
 ```{r echo=FALSE, Bivariate_pH_qual}
-ggplot(aes(x = pH, y = quality), data = wn) + geom_jitter(height = .4)
+ggplot(aes(x = pH, y = quality), data = wn) + 
+    geom_jitter(height = .4, alpha=.25) 
 cor.test(wn$pH, wn$quality)
 ```
 
-As seen in the above plot and correlation test, there is essentially no relationship
-between pH and quality. Most wines fall within a pH of 3.1 and 3.6 and the average
+As shown by the correlation test, there is essentially no relationship between
+pH and quality. Most wines fall within a pH of 3.1 and 3.6 and the average 
 quality wines span a broader range of pH than the better and worse wines.
 
 ```{r echo=FALSE, Bivariate_sulph_qual}
 ggplot(aes(x = sulphates, y = quality), data = wn) + 
-    geom_jitter(alpha = .5, height = .45)
+    geom_jitter(alpha = .2, height = .45) +
+    geom_smooth(method="lm", se=F, size=1)
+
 cor.test(wn$sulphates, wn$quality)                                                          
 ```
 
-As the plot and correlation test show, there is only a weak positive relationship
-between sulphates content and quality. The average score wines have a wider range 
-sulphate content. 
+
+###   CORRELATION TEST (COEFFICIENT OF CORR. / PEARSONS R) SHOWS THE STRENGTH OF THE LINEARITY
+### THE SLOPE OF THE LINE HAS NOTHING TO DO WITH PEARSONS R / THE STRENGTH OF THE RELATIONSHIP
+
+
+As correlation test show, there is only a weak positive relationship between 
+sulphates content and quality. The blue line represents the linear model fit to
+the data, and shows the trend of this relationship. The average score wines have 
+a wider range sulphate content. 
 
 I was hoping to find some interesting relationships between sugar, pH, sulphates,
 alcohol and quality, but except for alcohol, and to some extent, sulphates, there 
@@ -436,8 +450,8 @@ dioxide, volatile acidity, and chlorides.
 
 ```{r echo=FALSE, Bivariate_TotSulf_qual}
 ggplot(aes(x = total.sulfur.dioxide, y = quality), data = wn) + 
-    geom_jitter(alpha = .5, height = 1)
-cor.test(wn$total.sulfur.dioxide, wn$quality)                                                          
+    geom_jitter(alpha = .25, height = 1)
+cor.test(wn$total.sulfur.dioxide, wn$quality)                                                     
 ```
 
 Very little to see here. There is a small negative correlation between total sulfur
@@ -446,7 +460,7 @@ having higher total sulfur dioxide measures.
 
 ```{r echo=FALSE, Bivariate_VolAcid_qual}
 ggplot(aes(x = volatile.acidity, y = quality), data = wn) + 
-    geom_jitter(alpha = .6, height = 1)
+    geom_jitter(alpha = .25, height = 1)
 cor.test(wn$volatile.acidity, wn$quality)                                                          
 ```
 
@@ -455,7 +469,7 @@ wines get lower in quality, they tend to have higher volatile acidity.
 
 ```{r echo=FALSE, Bivariate_Chlor_qual}
 ggplot(aes(x = chlorides, y = quality), data = wn) + 
-    geom_jitter(alpha = .2, height = .45)
+    geom_jitter(alpha = .1, height = .45)
 cor.test(wn$chlorides, wn$quality)                                                          
 ```
 
