@@ -20,6 +20,7 @@ library(grid) # another for plots
 library(memisc) # makes table of estimates for linear model
 library(lattice) # to make histogram with relative frequency
 library(directlabels)
+library(GGally) # to plot correlation matrix
 ```
 
 - Then, I set the working directory to the right folder, and verify the 
@@ -314,17 +315,50 @@ Doing so improved all of them, suggesting lognormal distributions.
 
 # Bivariate Plots Section
 
-I would like to check for any relationship between alcohol and sugar content, 
-alcohol and quality, and sugar and quality. Additionally, I would like to check
-for a relationship between pH and quality, and sulphates and quality.
+Since I am trying to uncover patterns in the data, and relationships between 
+variables, focusing my efforts with measures of correlation between variables 
+can give me a headstart on that process. Below, I will plot a correlation 
+matrix which shows the correlation coefficients between all the variables.
 
-I'm mostly curious about dividing variables between things that make a wine good, 
-and things that make a wine bad. In other words, we know that high acetic acid* and 
-high total sulfur dioxide* probably make a wine bad, because it tastes like vinegar
-or smells like rotten eggs. On the other hand, there are wine-making factors like
-sulphates* added, sugar in the wine, and how acidic the wine is allowed to get. I'm
-pretty sure that these factors can be controlled by the winemaker, and therefore
-could correlate to striking successes. 
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, BiVariate_CorrMatrix}
+ggcorr(data=wn[,-1], label=T, label_size = 3, hjust=.9, layout.exp=2)
+```
+
+The correlation matrix shows that there are a few variables with high and medium
+correlations, and many with low correlations. Some of the high correlations don't
+really have much signal, as they are correlations between very similar variables, 
+like citric acid and volatile acidity, or total sulfur dioxide and free sulfur 
+dioxide. These high correlations would be similar to a high correlation between
+ticket sales and total attendance at a sporting event, they are too connected to 
+produce signal. 
+
+The variables with medium to high correlations that are reasonably independent
+of each other are:
+
+- residual sugar to density: 0.4
+- sulphates to chlorides: 0.4
+- alcohol to quality: 0.5
+- fixed acidity to density: 0.7
+
+- alcohol to density: -0.5
+- volatile acidity to quality: -0.5
+
+Both high and negative correlations are interesting. Some of these correlations 
+seem explainable by simple physics, but others could yield some unexpected 
+patterns. For example, as sugar increases, density goes up. This is simple, you 
+dissolve more solid into a liquid, the density increases. As alcohol increases,
+density decreases. Since alcohol is less dense than water, this makes sense. The 
+less obvious relationships are sulphates to chlorides, alcohol to quality, and 
+volatile acidity to quality. It will be useful to explore those relationships in
+greater detail.
+
+Additionally, I'm curious about dividing variables between things that make a 
+wine good, and things that make a wine bad. In other words, we know that high 
+acetic acid and high total sulfur dioxide probably make a wine bad, because it 
+tastes like vinegar or smells like rotten eggs. On the other hand, there are 
+wine-making factors like sulphates* added, sugar in the wine, and how acidic the
+wine is allowed to get. I'm pretty sure that these factors can be controlled by 
+the winemaker, and therefore could correlate to striking successes. 
 
 *Sulphates: a wine additive which can contribute to sulfur dioxide gas (S02) levels, 
 wich acts as an antimicrobial and antioxidant.
