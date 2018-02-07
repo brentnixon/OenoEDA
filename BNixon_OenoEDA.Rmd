@@ -204,24 +204,25 @@ apparent benefit.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots_histo_logtrans}
 p1 <- ggplot(aes(x = fixed.acidity), data = wn) + geom_histogram() + 
-      scale_x_log10()
+      scale_x_continuous(trans="log10",breaks = c(5, 10, 14))
 p2 <- ggplot(aes(x = volatile.acidity), data = wn) + geom_histogram() + 
-      scale_x_sqrt()
+      scale_x_continuous(trans="sqrt",breaks = c(.25, .5, 1.))
 p3 <- ggplot(aes(x = citric.acid), data = wn) + geom_histogram() + 
       scale_x_log10()
 p4 <- ggplot(aes(x = residual.sugar), data = wn) + geom_histogram() + 
-      scale_x_log10()
+      scale_x_continuous(trans="log10",breaks = c(1,2.5,5,10))
 p5 <- ggplot(aes(x = chlorides), data = wn) + geom_histogram() + 
-  scale_x_log10()
+      scale_x_continuous(trans="log10",breaks = c(.05,.1,.2))
 p6 <- ggplot(aes(x = free.sulfur.dioxide), data = wn) + geom_histogram() + 
-      scale_x_log10()
+      scale_x_continuous(trans="log10",breaks = c(5,15,40))
 p7 <- ggplot(aes(x = total.sulfur.dioxide), data = wn) + geom_histogram() + 
-      scale_x_log10()
+      scale_x_continuous(trans="log10",breaks = c(10,30,100))
 
 p10 <- ggplot(aes(x = sulphates), data = wn) + geom_histogram() + 
-       scale_x_log10()
+       scale_x_continuous(trans="log10",breaks = c(.4,.6,1))
+
 p11 <- ggplot(aes(x = alcohol), data = wn) + geom_histogram() + 
-       scale_x_log10()
+       scale_x_continuous(trans="log10",breaks = c(9,11,13))
 
 grid.arrange(p1, p2, p3, p4, p5, p6, p7, p10, p11, ncol = 3, nrow = 3)
 ```
@@ -395,12 +396,12 @@ cor.test(wn$alcohol, wn$quality)
 
 This plot suggests a moderate relationship between alcohol and quality. In the 
 highest and lowest ranges of quality, there is a weak (created by few data points)
-trend of higher alcohol associating with higher quality, and vice versa.  The 
-blue line is a linear model fit to the data and demonstrates the positive trend.
-A stronger trend is that 'good' wines (with scores from 5-7) span a broad range
-of alcohol content, between 9 and 11%, as well as demonstrating a the same trend 
-of higher alcohol correlating with higher quality. The correlation test yields a 
-0.48 correlation between alcohol and quality. 
+trend of higher alcohol associating with higher quality, and vice versa. A 
+stronger trend is that 'good' wines (with scores from 5-7) span a broad range of
+alcohol content, between 9 and 11%, as well as demonstrating a the same trend of
+higher alcohol correlating with higher quality. The correlation test yields a 
+0.48 correlation between alcohol and quality. The blue line is a linear model 
+fit to the data and demonstrates the positive trend.
 
 ```{r echo=FALSE, Bivariate_sug_quality}
 ggplot(aes(x = residual.sugar, y = quality), data = wn) + 
@@ -432,11 +433,6 @@ ggplot(aes(x = sulphates, y = quality), data = wn) +
 cor.test(wn$sulphates, wn$quality)                                                          
 ```
 
-
-###   CORRELATION TEST (COEFFICIENT OF CORR. / PEARSONS R) SHOWS THE STRENGTH OF THE LINEARITY
-### THE SLOPE OF THE LINE HAS NOTHING TO DO WITH PEARSONS R / THE STRENGTH OF THE RELATIONSHIP
-
-
 As correlation test show, there is only a weak positive relationship between 
 sulphates content and quality. The blue line represents the linear model fit to
 the data, and shows the trend of this relationship. The average score wines have 
@@ -460,12 +456,15 @@ having higher total sulfur dioxide measures.
 
 ```{r echo=FALSE, Bivariate_VolAcid_qual}
 ggplot(aes(x = volatile.acidity, y = quality), data = wn) + 
-    geom_jitter(alpha = .25, height = 1)
+    geom_jitter(alpha = .25, height = 1) +
+    geom_smooth(method="lm", se=F, size=1)
+
 cor.test(wn$volatile.acidity, wn$quality)                                                          
 ```
 
 There is a moderate negative correlation (-0.49) between volatile acidity and quality. As
-wines get lower in quality, they tend to have higher volatile acidity. 
+wines get lower in quality, they tend to have higher volatile acidity. The blue 
+linear regression line shows this negative trend.
 
 ```{r echo=FALSE, Bivariate_Chlor_qual}
 ggplot(aes(x = chlorides, y = quality), data = wn) + 
