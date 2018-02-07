@@ -1,6 +1,6 @@
 OenoEDA by Brent Nixon
 ========================================================
- - First, I load in the packages that will be used in the project. 
+ - First, I load in the packages that will be used in the project.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
 # Load all of the packages that you end up using in your analysis in this code
@@ -232,6 +232,32 @@ did not respond as well to the transformation as others. The logarithmic
 transformation should work well on data whose values span orders of magnitude.
 Since none of these variables really do that, I'm not surprised that some of the 
 transformations were not particularly effective.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univar_Plots_hist_BucketQual}
+wn$`Quality Bucket` <- cut(wn$quality, c(1,4,6,10), 
+                          labels = c("Bad", "Good", "Excellent"))
+
+p12 <- ggplot(aes(x = quality), data = wn) + 
+       geom_histogram()
+p13 <- ggplot(aes(x = `Quality Bucket`), data = wn) + 
+       geom_histogram(stat = "count")
+
+grid.arrange(p12, p13, ncol = 2, nrow = 1)
+```
+
+Later in this project, I decided to group the quality data into three categories, 
+good, bad, and excellent, and then break down a few plots by those categories. I
+realized it could also be helpful to understanding the distribution of wines by 
+quality in this section, so I added a wine quality histogram doing just that. 
+
+The figure above shows the histograms of quality and quality bucket, respectively.
+The quality buckets are 1-4, 5-6, and 7-10, representing bad, good, and 
+excellent quality. Armed with that information and comparing the two chart 
+side-by-side, it makes sense that the good bucket would be dramatically larger
+than the bad or excellent bucket. The histogram of the individual scores shows 
+that wines with score 5 or 6 comprise most of the sample. Additionally, the 
+excellent bucket gets a bump from the decent amount of wines with a score of 7.
 
 # Univariate Analysis
 
