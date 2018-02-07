@@ -527,24 +527,25 @@ ggplot(aes(x = alcohol, y = residual.sugar), data = wn) +
     geom_line(aes(x = median(alcohol)))  
 ```
 
-The insight I get from this plot, of alcohol by residual sugar, faceted by quality
-bracket, is that a majority of both the worst and best wines have an 
+The above chart shows residual sugar plotted against alcohol, faceted by quality
+bracket, with the overall median alcohol content shown by the vertical lines.
+The pattern I see is that a majority of both the worst and best wines have an 
 alcohol content less than the overall median alcohol content. Thd best wines, on 
 the other hand, almost all have an alcohol content fairly higher than the median.
-Except for the good wines, alcohol does not seem to have a relationship with residual
-sugar. The slight relationship visible with good wines could simply be owing there
-being many more data points for that quality bracket.
+Except for the good wines, alcohol does not seem to have a relationship with 
+residual sugar. The slight relationship visible with good wines could simply be 
+owing there being many more data points for that quality bracket.
 
 ```{r echo=FALSE, Multivar_sulph_so2_quality}
 ggplot(aes(x = sulphates, y = total.sulfur.dioxide), data = wn) + 
     geom_point(alpha = .15) + facet_wrap(~wn$`Quality Bucket`) + 
-    geom_line(aes(x = median(sulphates)))                                                                                 
+    geom_line(aes(x = median(sulphates)))                                                                 
 ```
 
 The relationship we see in this plot is that bad wines have a sulphate content 
-slightly below the median value, good wines have a below-median content, but a 
-little less below than that of bad wines. Lastly, excellent wines have an 
-above-median sulphate content.
+slightly below the median value (shown again by vertical lines), good wines have
+a below-median content, but a little less below than that of bad wines. Lastly, 
+excellent wines have an above-median sulphate content.
 
 ```{r echo=FALSE, Multivar_pH_volatileAcidity_quality}
 ggplot(aes(x = pH, y = volatile.acidity), data = wn) + geom_point(alpha = .2) + 
@@ -552,12 +553,12 @@ ggplot(aes(x = pH, y = volatile.acidity), data = wn) + geom_point(alpha = .2) +
 ```
 
 From this last plot, we can see that the bad wines generally have a pH above the 
-pH median. Also, more of them have higher volatile acidity measurements than the 
-excellent wines. In other words, they have low acidity and are often slightly 
-vinegary (mmm...). Good wines usually straddle the pH median, but are lower in
-volatile acidity than bad wines. Excellent wines, however, are a bit lower in 
-acidity than the others as well as having the lowest amount of volatile acidity
-among the three quality brackets. 
+pH median (shown by vertical lines). Also, more of them have higher volatile acidity 
+measurements than the excellent wines. In other words, they have low acidity and 
+are often slightly vinegary (mmm...). Good wines usually straddle the pH median,
+but are lower in volatile acidity than bad wines. Excellent wines, however, are 
+a bit lower in acidity than the others as well as having the lowest amount of 
+volatile acidity among the three quality brackets. 
 
 I couldn't help but try to fit the data to a linear model. I made eleven versions
 of the model, starting with one variable, and updating each subsequent model with 
