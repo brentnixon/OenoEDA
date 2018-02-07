@@ -342,7 +342,7 @@ of each other are:
 - fixed acidity to density: 0.7
 
 - alcohol to density: -0.5
-- volatile acidity to quality: -0.5
+- volatile acidity to quality: -0.4
 
 Both high and negative correlations are interesting. Some of these correlations 
 seem explainable by simple physics, but others could yield some unexpected 
@@ -459,8 +459,7 @@ ggplot(aes(x = volatile.acidity, y = quality), data = wn) +
 cor.test(wn$volatile.acidity, wn$quality)                                                          
 ```
 
-There is a moderate negative correlation (-0.49) between volatile acidity and quality. As
-wines get lower in quality, they tend to have higher volatile acidity. The blue 
+There is a moderate negative correlation (-0.39) between volatile acidity and quality. As wines get lower in quality, they tend to have higher volatile acidity. The blue 
 linear regression line shows this negative trend.
 
 ```{r echo=FALSE, Bivariate_Chlor_qual}
@@ -629,63 +628,26 @@ to the 95th percentiles.
 # Final Plots and Summary
 
 ### Plot One
-```{r echo=FALSE, fig.width=10, Plot_One}
-b1 <- ggplot(aes(x = "", y = fixed.acidity), data = wn) + 
-      geom_boxplot(alpha = .1) + labs(x="", y="Fixed Acidity (g/dm^3)") + 
-      theme(axis.title=element_text(size=9))
-
-b2 <- ggplot(aes(x = "", y = volatile.acidity), data = wn) + 
-      geom_boxplot(alpha = .2)  + labs(x="", y="Volatile (g/dm^3)") + 
-      theme(axis.title=element_text(size=9))
-
-b3 <- ggplot(aes(x = "", y = citric.acid), data = wn) + 
-      geom_boxplot(alpha = .5) + labs(x="", y="Citric Acid (g/dm^3)") +
-      theme(axis.title=element_text(size=9))
-
-b4 <- ggplot(aes(x = "", y = residual.sugar), data = wn) + 
-      geom_boxplot(alpha = .1) + labs(x="", y="Residual Sugar (g/dm^3)") +
-      theme(axis.title=element_text(size=9))
-
-b5 <- ggplot(aes(x = "", y = chlorides), data = wn) + 
-      geom_boxplot(alpha = .1) + labs(x="", y="Chlorides (g/dm^3)") + 
-      theme(axis.title=element_text(size=9))
-
-b6 <- ggplot(aes(x = "", y = free.sulfur.dioxide), data = wn) + 
-      geom_boxplot(alpha = .2) + labs(x="", y="Free Sulfur Dioxide (mg/dm^3)") +
-      theme(axis.title=element_text(size=9))
-
-b7 <- ggplot(aes(x = "", y = total.sulfur.dioxide), data = wn) + 
-      geom_boxplot(alpha = .2) + labs(x="", y="Total Sulfur Dioxide (mg/dm^3)")+
-      theme(axis.title=element_text(size=9))
-
-b8 <- ggplot(aes(x = "", y = density), data = wn) + geom_boxplot(alpha = .2) +
-      labs(x="", y="Density (g/cm^3)") + theme(axis.title=element_text(size=9))
-
-b9 <- ggplot(aes(x = "", y = pH), data = wn) + geom_boxplot(alpha = .2) +
-      labs(x="", y="pH") + theme(axis.title=element_text(size=9))
-
-b10 <- ggplot(aes(x = "", y = sulphates), data = wn) + 
-       geom_boxplot(alpha = .2) + labs(x="", y="Sulphates (g/dm^3)") + 
-       theme(axis.title=element_text(size=9))
-
-b11 <- ggplot(aes(x = "", y = alcohol), data = wn) + geom_boxplot(alpha = .2) +
-       labs(x="", y="Alcohol (% by Vol.)") + 
-       theme(axis.title=element_text(size=9))
-
-b12 <- ggplot(aes(x = "", y = quality), data = wn) + geom_boxplot(alpha = .2) +
-       labs(x="", y="Quality (1-10)") + theme(axis.title=element_text(size=9))
-
-grid.arrange(b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, ncol = 6, 
-             nrow = 2, top="Boxplot of Each Physico-Chemical Attribute") 
+```{r echo=FALSE, warning=FALSE, fig.width=10, Plot_One}
+ggplot(aes(x = volatile.acidity, y = quality), data = wn) + 
+    geom_jitter(alpha = .25, height = 1) +
+    geom_smooth(method="lm", se=F, size=1, color="#696969") +
+    labs(title="Plot of Quality Against Volatile Acidity", 
+         x="Volatile Acidity (g/dm^3)", y="Quality Score (1-10)") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    annotate(x=1.4, y=7.5, label=paste("Corr. Coef. = ", 
+        round(cor(wn$volatile.acidity, wn$quality),2)), geom="text", size=5)
 ```
 
 ### Description One
-I chose to use this plot because it gives a large amount of information about
-the entire dataset in one fairly simple figure. You can see the pervasive positive 
-skew across many of the variables, as well as seeing which attributes relate
-to each other categorically (e.g. types of acidity) and which attributes aren't 
-necessarily related, but have similar structure regarding central tendency, skew,
-and number of outliers. 
+I picked this plot because it is one of the strongest negative correlations 
+(that is also interesting) in the dataset. As shown on the graph, there is a -0.39 
+(moderate) correlation between volatile acidity and wine quality. Volatile 
+acidity is essentially the amount of acetic acid, the primary component in 
+vinegar, in wine. When volatile acidity gets too high, the wine takes on an
+unpleasant, vinegar taste. This explains the trend shown by the grey line which
+represents a linear model fit to the data. As volatile acidity increases, quality
+decreases.  
 
 ### Plot Two
 ```{r echo=FALSE, warning=FALSE, fig.width=10, Plot_Two}
@@ -751,284 +713,7 @@ grid.arrange(bd, gd, ex, ncol=3, nrow=1,
 I chose this plot, of residual sugar against alcohol, faceted by quality bucket,
 because it is one of the few plots where there was a noticeable trend. The three 
 panels show how alcohol and sugar content relate to each other for bad, good, and 
-excellent wines. Superimposed on each panel are vertical lines repreShow in New WindowClear OutputExpand/Collapse Output
-
-
-	Pearson's product-moment correlation
-
-data:  wn$alcohol and wn$quality
-t = 21.639, df = 1597, p-value < 2.2e-16
-alternative hypothesis: true correlation is not equal to 0
-95 percent confidence interval:
- 0.4373540 0.5132081
-sample estimates:
-      cor 
-0.4761663 
-
-R Console
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-Error in +geom_smooth(method = "lm", se = F, size = 1) : 
-  invalid argument to unary operator
-R Console
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-
-	Pearson's product-moment correlation
-
-data:  wn$residual.sugar and wn$quality
-t = 0.5488, df = 1597, p-value = 0.5832
-alternative hypothesis: true correlation is not equal to 0
-95 percent confidence interval:
- -0.03531327  0.06271056
-sample estimates:
-       cor 
-0.01373164 
-
-R Console
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-
-	Pearson's product-moment correlation
-
-data:  wn$pH and wn$quality
-t = -2.3109, df = 1597, p-value = 0.02096
-alternative hypothesis: true correlation is not equal to 0
-95 percent confidence interval:
- -0.106451268 -0.008734972
-sample estimates:
-        cor 
--0.05773139 
-
-R Console
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-
-	Pearson's product-moment correlation
-
-data:  wn$total.sulfur.dioxide and wn$quality
-t = -7.5271, df = 1597, p-value = 8.622e-14
-alternative hypothesis: true correlation is not equal to 0
-95 percent confidence interval:
- -0.2320162 -0.1373252
-sample estimates:
-       cor 
--0.1851003 
-
-R Console
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-
-	Pearson's product-moment correlation
-
-data:  wn$sulphates and wn$quality
-t = 10.38, df = 1597, p-value < 2.2e-16
-alternative hypothesis: true correlation is not equal to 0
-95 percent confidence interval:
- 0.2049011 0.2967610
-sample estimates:
-      cor 
-0.2513971 
-
-R Console
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-
-	Pearson's product-moment correlation
-
-data:  wn$volatile.acidity and wn$quality
-t = -16.954, df = 1597, p-value < 2.2e-16
-alternative hypothesis: true correlation is not equal to 0
-95 percent confidence interval:
- -0.4313210 -0.3482032
-sample estimates:
-       cor 
--0.3905578 
-
-R Console
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-
-	Pearson's product-moment correlation
-
-data:  wn$chlorides and wn$quality
-t = -5.1948, df = 1597, p-value = 2.313e-07
-alternative hypothesis: true correlation is not equal to 0
-95 percent confidence interval:
- -0.17681041 -0.08039344
-sample estimates:
-       cor 
--0.1289066 
-
-R Console
-
-Show in New WindowClear OutputExpand/Collapse Output
-[1] 1599   14
-Show in New WindowClear OutputExpand/Collapse Output
-'data.frame':	1599 obs. of  14 variables:
- $ X                   : int  1 2 3 4 5 6 7 8 9 10 ...
- $ fixed.acidity       : num  7.4 7.8 7.8 11.2 7.4 7.4 7.9 7.3 7.8 7.5 ...
- $ volatile.acidity    : num  0.7 0.88 0.76 0.28 0.7 0.66 0.6 0.65 0.58 0.5 ...
- $ citric.acid         : num  0 0 0.04 0.56 0 0 0.06 0 0.02 0.36 ...
- $ residual.sugar      : num  1.9 2.6 2.3 1.9 1.9 1.8 1.6 1.2 2 6.1 ...
- $ chlorides           : num  0.076 0.098 0.092 0.075 0.076 0.075 0.069 0.065 0.073 0.071 ...
- $ free.sulfur.dioxide : num  11 25 15 17 11 13 15 15 9 17 ...
- $ total.sulfur.dioxide: num  34 67 54 60 34 40 59 21 18 102 ...
- $ density             : num  0.998 0.997 0.997 0.998 0.998 ...
- $ pH                  : num  3.51 3.2 3.26 3.16 3.51 3.51 3.3 3.39 3.36 3.35 ...
- $ sulphates           : num  0.56 0.68 0.65 0.58 0.56 0.56 0.46 0.47 0.57 0.8 ...
- $ alcohol             : num  9.4 9.8 9.8 9.8 9.4 9.4 9.4 10 9.5 10.5 ...
- $ quality             : int  5 5 5 6 5 5 5 7 7 5 ...
- $ Quality Bucket      : Factor w/ 3 levels "Bad","Good","Excellent": 2 2 2 2 2 2 2 3 3 2 ...
-Show in New WindowClear OutputExpand/Collapse Output
-       X          fixed.acidity   volatile.acidity  citric.acid    residual.sugar     chlorides      
- Min.   :   1.0   Min.   : 4.60   Min.   :0.1200   Min.   :0.000   Min.   : 0.900   Min.   :0.01200  
- 1st Qu.: 400.5   1st Qu.: 7.10   1st Qu.:0.3900   1st Qu.:0.090   1st Qu.: 1.900   1st Qu.:0.07000  
- Median : 800.0   Median : 7.90   Median :0.5200   Median :0.260   Median : 2.200   Median :0.07900  
- Mean   : 800.0   Mean   : 8.32   Mean   :0.5278   Mean   :0.271   Mean   : 2.539   Mean   :0.08747  
- 3rd Qu.:1199.5   3rd Qu.: 9.20   3rd Qu.:0.6400   3rd Qu.:0.420   3rd Qu.: 2.600   3rd Qu.:0.09000  
- Max.   :1599.0   Max.   :15.90   Max.   :1.5800   Max.   :1.000   Max.   :15.500   Max.   :0.61100  
- free.sulfur.dioxide total.sulfur.dioxide    density             pH          sulphates     
- Min.   : 1.00       Min.   :  6.00       Min.   :0.9901   Min.   :2.740   Min.   :0.3300  
- 1st Qu.: 7.00       1st Qu.: 22.00       1st Qu.:0.9956   1st Qu.:3.210   1st Qu.:0.5500  
- Median :14.00       Median : 38.00       Median :0.9968   Median :3.310   Median :0.6200  
- Mean   :15.87       Mean   : 46.47       Mean   :0.9967   Mean   :3.311   Mean   :0.6581  
- 3rd Qu.:21.00       3rd Qu.: 62.00       3rd Qu.:0.9978   3rd Qu.:3.400   3rd Qu.:0.7300  
- Max.   :72.00       Max.   :289.00       Max.   :1.0037   Max.   :4.010   Max.   :2.0000  
-    alcohol         quality        Quality Bucket
- Min.   : 8.40   Min.   :3.000   Bad      :  63  
- 1st Qu.: 9.50   1st Qu.:5.000   Good     :1319  
- Median :10.20   Median :6.000   Excellent: 217  
- Mean   :10.42   Mean   :5.636                   
- 3rd Qu.:11.10   3rd Qu.:6.000                   
- Max.   :14.90   Max.   :8.000                   
-Show in New WindowClear OutputExpand/Collapse Output
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-Show in New WindowClear OutputExpand/Collapse Output
-
-Calls:
-wnm1: lm(formula = quality ~ fixed.acidity, data = wn)
-wnm2: lm(formula = quality ~ fixed.acidity + volatile.acidity, data = wn)
-wnm3: lm(formula = quality ~ fixed.acidity + volatile.acidity + citric.acid, 
-    data = wn)
-wnm4: lm(formula = quality ~ fixed.acidity + volatile.acidity + citric.acid + 
-    residual.sugar, data = wn)
-wnm5: lm(formula = quality ~ fixed.acidity + volatile.acidity + citric.acid + 
-    residual.sugar + chlorides, data = wn)
-
-==========================================================================================
-                        wnm1          wnm2          wnm3          wnm4          wnm5      
-------------------------------------------------------------------------------------------
-  (Intercept)           5.157***      6.451***      6.450***      6.439***      6.541***  
-                       (0.098)       (0.121)       (0.121)       (0.123)       (0.124)    
-  fixed.acidity         0.058***      0.012         0.014         0.014         0.006     
-                       (0.012)       (0.011)       (0.015)       (0.015)       (0.015)    
-  volatile.acidity                   -1.732***     -1.746***     -1.752***     -1.608***  
-                                     (0.107)       (0.127)       (0.128)       (0.130)    
-  citric.acid                                      -0.032        -0.042         0.174     
-                                                   (0.152)       (0.153)       (0.159)    
-  residual.sugar                                                  0.007         0.008     
-                                                                 (0.013)       (0.013)    
-  chlorides                                                                    -2.019***  
-                                                                               (0.413)    
-------------------------------------------------------------------------------------------
-  R-squared             0.015         0.153         0.153         0.153         0.166     
-  adj. R-squared        0.015         0.152         0.152         0.151         0.163     
-  sigma                 0.802         0.744         0.744         0.744         0.739     
-  F                    24.960       144.319        96.170        72.166        63.351     
-  p                     0.000         0.000         0.000         0.000         0.000     
-  Log-likelihood    -1914.235     -1793.729     -1793.707     -1793.564     -1781.641     
-  Deviance           1026.127       882.555       882.530       882.372       869.310     
-  AIC                3834.471      3595.459      3597.415      3599.128      3577.281     
-  BIC                3850.602      3616.968      3624.300      3631.391      3614.921     
-  N                  1599          1599          1599          1599          1599         
-==========================================================================================
-
-Calls:
-wnm6: lm(formula = quality ~ fixed.acidity + volatile.acidity + citric.acid + 
-    residual.sugar + chlorides + free.sulfur.dioxide, data = wn)
-wnm7: lm(formula = quality ~ fixed.acidity + volatile.acidity + citric.acid + 
-    residual.sugar + chlorides + free.sulfur.dioxide + total.sulfur.dioxide, 
-    data = wn)
-wnm8: lm(formula = quality ~ fixed.acidity + volatile.acidity + citric.acid + 
-    residual.sugar + chlorides + free.sulfur.dioxide + total.sulfur.dioxide + 
-    density, data = wn)
-wnm9: lm(formula = quality ~ fixed.acidity + volatile.acidity + citric.acid + 
-    residual.sugar + chlorides + free.sulfur.dioxide + total.sulfur.dioxide + 
-    density + pH, data = wn)
-wnm10: lm(formula = quality ~ fixed.acidity + volatile.acidity + citric.acid + 
-    residual.sugar + chlorides + free.sulfur.dioxide + total.sulfur.dioxide + 
-    density + pH + sulphates, data = wn)
-wnm11: lm(formula = quality ~ fixed.acidity + volatile.acidity + citric.acid + 
-    residual.sugar + chlorides + free.sulfur.dioxide + total.sulfur.dioxide + 
-    density + pH + sulphates + alcohol, data = wn)
-
-============================================================================================================
-                            wnm6          wnm7          wnm8          wnm9         wnm10         wnm11      
-------------------------------------------------------------------------------------------------------------
-  (Intercept)               6.641***      6.663***    166.584***    182.592***    189.679***     21.965     
-                           (0.131)       (0.129)      (14.259)      (14.795)      (14.266)      (21.195)    
-  fixed.acidity             0.001        -0.016         0.119***      0.174***      0.172***      0.025     
-                           (0.015)       (0.015)       (0.019)       (0.023)       (0.023)       (0.026)    
-  volatile.acidity         -1.623***     -1.404***     -1.219***     -1.256***     -0.984***     -1.084***  
-                           (0.130)       (0.131)       (0.127)       (0.127)       (0.125)       (0.121)    
-  citric.acid               0.176         0.464**       0.202         0.170         0.047        -0.183     
-                           (0.158)       (0.160)       (0.156)       (0.156)       (0.150)       (0.147)    
-  residual.sugar            0.014         0.022         0.080***      0.085***      0.095***      0.016     
-                           (0.014)       (0.013)       (0.014)       (0.014)       (0.013)       (0.015)    
-  chlorides                -2.005***     -2.071***     -1.195**      -0.645        -2.278***     -1.874***  
-                           (0.412)       (0.405)       (0.398)       (0.421)       (0.431)       (0.419)    
-  free.sulfur.dioxide      -0.004*        0.008**       0.006**       0.005*        0.004         0.004*    
-                           (0.002)       (0.002)       (0.002)       (0.002)       (0.002)       (0.002)    
-  total.sulfur.dioxide                   -0.006***     -0.005***     -0.004***     -0.004***     -0.003***  
-                                         (0.001)       (0.001)       (0.001)       (0.001)       (0.001)    
-  density                                            -161.857***   -180.667***   -188.401***    -17.881     
-                                                      (14.431)      (15.178)      (14.638)      (21.633)    
-  pH                                                                  0.675***      0.625***     -0.414*    
-                                                                     (0.175)       (0.169)       (0.192)    
-  sulphates                                                                         1.261***      0.916***  
-                                                                                   (0.113)       (0.114)    
-  alcohol                                                                                         0.276***  
-                                                                                                 (0.026)    
-------------------------------------------------------------------------------------------------------------
-  R-squared                 0.169         0.198         0.256         0.263         0.317         0.361     
-  adj. R-squared            0.166         0.194         0.253         0.259         0.312         0.356     
-  sigma                     0.738         0.725         0.698         0.695         0.670         0.648     
-  F                        53.851        55.968        68.538        63.097        73.611        81.348     
-  p                         0.000         0.000         0.000         0.000         0.000         0.000     
-  Log-likelihood        -1778.901     -1750.636     -1689.759     -1682.345     -1622.136     -1569.138     
-  Deviance                866.336       836.243       774.933       767.779       712.083       666.411     
-  AIC                    3573.801      3519.271      3399.519      3386.689      3268.271      3164.277     
-  BIC                    3616.818      3567.666      3453.290      3445.838      3332.797      3234.179     
-  N                      1599          1599          1599          1599          1599          1599         
-============================================================================================================senting the 
+excellent wines. Superimposed on each panel are vertical lines representing the 
 median alcohol content for wines in each particular quality bucket, as well as 
 overall. 
 
